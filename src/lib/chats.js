@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3')
-let db = new sqlite3.Database(process.env.STORAGE_FILE || './storage.db')
+let db = new sqlite3.Database(process.env.STORAGE_FILE || './storage/storage.db')
 
 db.run('\
   CREATE TABLE IF NOT EXISTS chats (\
