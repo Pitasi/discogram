@@ -18,7 +18,11 @@ const markup = {
 
 // Returns a formatted string from array of servers
 let formatMessage = (servers) => {
-  let result = '';
+  if (!servers || servers.length == 0)
+    return 'You first need to link a server via Discord!\n' +
+           'Type /start to get help.'
+
+  let result = ''
   servers.forEach((o) => {
     let msg = `[ ${o.name} ]\n` // 1st line: discord server name
     let filteredChannels =
