@@ -53,16 +53,20 @@ bot.on('message', function(user, userID, channelID, message, event) {
     bot.sendMessage({
       to: channelID,
       message:
-      'Click here to add the bot to a Telegram group:\n' +
-      `https://t.me/discogrambot?startgroup=disc_${bot.channels[channelID].guild_id}\n\n`+
-      'Remember: you can always remove a link using the ++tgunlink command.'
+        'Click here to link this server to your **Telegram profile**:\n' +
+        `:point_right: <https://t.me/discogrambot?start=disc_${bot.channels[channelID].guild_id}>\n\n`+
+        'OR click here to link this server to a **Telegram group**:\n' +
+        `:point_right: <https://t.me/discogrambot?startgroup=disc_${bot.channels[channelID].guild_id}>\n\n`+
+        '**Remember**: you can always remove a link using the __++tgunlink__ command.'
     })
   else if (message === '++tgunlink')
     bot.sendMessage({
       to: channelID,
       message:
-      'Click here to unlink the server from a Telegram group:\n' +
-      `https://t.me/discogrambot?startgroup=undisc_${bot.channels[channelID].guild_id}`
+        'Click here to unlink this server from your **Telegram profile**:\n' +
+        `<https://t.me/discogrambot?start=undisc_${bot.channels[channelID].guild_id}>\n\n`+
+        'OR click here to unlink the server from a **Telegram group**:\n' +
+        `<https://t.me/discogrambot?startgroup=undisc_${bot.channels[channelID].guild_id}>`
     })
 })
 
