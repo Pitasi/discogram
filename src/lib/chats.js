@@ -10,10 +10,26 @@ db.run('\
 
 module.exports = {
   getDiscordId: (telegramId, callback) => {
-    return db.get('SELECT * FROM chats WHERE telegramId=?', [telegramId], callback)
+    return db.all('SELECT * FROM chats WHERE telegramId=?', [telegramId], callback)
   },
 
-  newLink: (telegramId, discordId) => {
-    return db.run('INSERT INTO chats VALUES (?, ?)', [telegramId, discordId])
+  delete: (telegramId, discordId) => {
+    return db.run(
+      'DELETE FROM chats WHERE telegramId=? AND discordId=?',
+      [telegramId, discordId]
+    )
+  },
+
+  newLink: (telegramId, discordId, callback) => {
+    return db.run(
+      'INSERT INTO chats VALUES (?, ?)',
+      [telegramId, discordId],
+      (err) => {
+        if (err) {
+          console.error(err)
+          callback(false)
+        }
+        else callback(true)
+    })
   }
 }
