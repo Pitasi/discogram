@@ -86,6 +86,7 @@ let callbackHandler = (call) => {
 // Handler for /discord command
 let cmdHandler = (msg) => {
   chatDispatch(msg.chat.id, (servers) => {
+    console.log(formatMessage(servers))
     tgbot.sendMessage(
       msg.chat.id,
       formatMessage(servers),

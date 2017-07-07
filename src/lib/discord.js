@@ -5,9 +5,16 @@ let bot = new Discord.Client({
     autorun: true
 })
 
+let escape = (string) => (
+  string.replace(/\<|\>/gi, (match) => {
+    let m = {'<': '\\<', '>': '\\>'}
+    return m[match]
+  })
+)
+
 let getGame = (user) => {
   if (user.bot || !user.game) return null
-  return user.game.name
+  return escape(user.game.name)
 }
 
 // Get user online in a channel
@@ -19,7 +26,7 @@ let usersInChannel = (channel) => {
     let id = channel.members[m].user_id
     res.push({
       id: id,
-      username: bot.users[id].username,
+      username: escape(bot.users[id].username),
       game: getGame(bot.users[id]),
       bot: bot.users[id].bot,
       deaf: channel.members[m].self_deaf || channel.members[m].deaf,
@@ -41,11 +48,11 @@ let channels = (serverId) => {
   for (var c in channels) {
     if (channels[c].type !== 'voice') continue
     res.push({
-      name: channels[c].name,
+      name: escape(channels[c].name),
       users: usersInChannel(channels[c])
     })
   }
-  return {name: server.name, channels: res}
+  return {name: escape(server.name), channels: res}
 }
 
 bot.on('message', function(user, userID, channelID, message, event) {
@@ -75,10 +82,13 @@ bot.on('ready', (event) => {
 });
 
 module.exports = {
-  onReady: (cb) => { bot.on('ready', cb) },
-  users: (serverId) => { return channels(serverId) },
-  isValid: (serverId) => {
-    return bot.servers[serverId] != null && bot.servers[serverId] != undefined
-  },
-  getId: () => (bot.id)
+  onReady: (cb) => ( bot.on('ready', cb) ),
+  users: (serverId) => ( channels(serverId) ),
+  isValid: (serverId) => (
+    bot.servers[serverId] != null && bot.servers[serverId] != undefined
+  ),
+  getId: () => (bot.id),
+  createInvite: (serverId, callback) => (
+    bot.createInvite({channelID: serverId, max_age: 0, max_users: 0}, callback)
+  )
 }
